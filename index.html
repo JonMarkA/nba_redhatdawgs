@@ -366,7 +366,8 @@
 <div class="filter-bar">
   <div class="filter-bar-inner">
     <div class="conf-tabs">
-      <button class="conf-tab active" onclick="switchConf('east', this)">Eastern Conference</button>
+      <button class="conf-tab active" onclick="switchConf('all', this)">Overall</button>
+      <button class="conf-tab" onclick="switchConf('east', this)">Eastern Conference</button>
       <button class="conf-tab" onclick="switchConf('west', this)">Western Conference</button>
     </div>
   </div>
@@ -420,7 +421,7 @@
 <script>
 const PREDICTIONS_URL = 'predictions.json';
 
-let currentConf = 'east';
+let currentConf = 'all';
 let oracleData  = null;
 
 const abbr = name =>
@@ -443,8 +444,11 @@ const statusPill = p => {
 function render(conf) {
   if (!oracleData) return;
 
+  const isAll = conf === 'all';
+  const playoffCount = isAll ? 16 : 8;
+
   const teams = [...oracleData.teams]
-    .filter(t => t.conference.toLowerCase() === conf)
+    .filter(t => isAll ? true : t.conference.toLowerCase() === conf)
     .sort((a, b) => b.playoffProbability - a.playoffProbability);
 
   const leader = teams[0];
@@ -453,15 +457,16 @@ function render(conf) {
 
   teams.forEach((team, i) => {
     const rank   = i + 1;
-    const isTop8 = rank <= 8;
+    const isTop8 = rank <= playoffCount;
     const faded  = team.playoffProbability < 30;
     const netSign = team.netRating >= 0 ? '+' : '';
 
-    if (rank === 9) {
+    if (rank === playoffCount + 1) {
       const cut = document.createElement('tr');
       cut.className = 'cutoff-row';
+      const label = isAll ? 'Playoff cutoff · top 16 advance (8 per conference)' : 'Playoff cutoff · top 8 advance';
       cut.innerHTML = `<td colspan="11">
-        <div class="cutoff-line">Playoff cutoff · top 8 advance</div>
+        <div class="cutoff-line">${label}</div>
       </td>`;
       tbody.appendChild(cut);
     }

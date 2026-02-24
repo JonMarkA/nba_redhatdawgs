@@ -3,16 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NBA Team Standings & Stats | NBA Oracle 2026</title>
+  <title>NBA Postseason Oracle 2025–26 | GSI Analytics</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-
-    /* ── RESET ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     a { text-decoration: none; color: inherit; }
     button { cursor: pointer; border: none; outline: none; background: none; font-family: inherit; }
 
-    /* ── TOKENS ── */
     :root {
       --black:      #000000;
       --white:      #ffffff;
@@ -38,116 +35,37 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ════════════════════════
-       UTILITY BAR
-    ════════════════════════ */
-    .utility-bar {
-      background: var(--black);
-      height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 0 32px;
-    }
-    .utility-bar a {
-      color: #666;
-      font-size: 11px;
-      font-weight: 500;
-      padding: 0 14px;
-      height: 34px;
-      display: flex;
-      align-items: center;
-      border-right: 1px solid #1a1a1a;
-      letter-spacing: 0.2px;
-      transition: color 0.1s;
-    }
-    .utility-bar a:first-child { border-left: 1px solid #1a1a1a; }
-    .utility-bar a:hover { color: var(--white); }
-
-    /* ════════════════════════
-       MAIN NAV
-    ════════════════════════ */
+    /* ── NAV ── */
     .main-nav {
-      background: var(--white);
-      border-bottom: 3px solid var(--black);
+      background: var(--black);
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     }
     .nav-inner {
       max-width: 1280px;
       margin: 0 auto;
-      height: 60px;
-      padding: 0 20px;
-      display: flex;
-      align-items: stretch;
-    }
-    .nav-logo {
+      height: 56px;
+      padding: 0 24px;
       display: flex;
       align-items: center;
-      padding-right: 24px;
-      border-right: 1px solid var(--border);
-      flex-shrink: 0;
+      justify-content: space-between;
     }
-    .nba-shield { width: 32px; height: 48px; }
-
-    .nav-links {
-      display: flex;
-      list-style: none;
-      align-items: stretch;
-      flex: 1;
-    }
-    .nav-links li { display: flex; align-items: stretch; }
-    .nav-links li a {
-      display: flex;
-      align-items: center;
-      padding: 0 14px;
-      font-size: 11.5px;
-      font-weight: 700;
-      color: var(--gray-600);
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      white-space: nowrap;
-      border-bottom: 3px solid transparent;
-      margin-bottom: -3px;
-      transition: color 0.1s, border-color 0.1s;
-    }
-    .nav-links li a:hover { color: var(--black); border-bottom-color: var(--gray-300); }
-    .nav-links li a.active { color: var(--black); border-bottom-color: var(--black); }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding-left: 16px;
-      border-left: 1px solid var(--border);
-      margin-left: 4px;
-    }
-    .search-btn {
-      width: 34px; height: 34px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--gray-600);
-      transition: background 0.1s;
-    }
-    .search-btn:hover { background: var(--gray-100); }
-    .btn-watch {
-      background: var(--black);
+    .nav-title {
+      font-size: 13px;
+      font-weight: 800;
       color: var(--white);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.6px;
-      padding: 8px 18px;
-      border-radius: 2px;
       text-transform: uppercase;
-      transition: opacity 0.1s;
+      letter-spacing: 1.5px;
     }
-    .btn-watch:hover { opacity: 0.7; }
+    .nav-meta {
+      font-size: 11px;
+      color: #555;
+      letter-spacing: 0.4px;
+      font-weight: 500;
+    }
 
-    /* ════════════════════════
-       PAGE HEADER
-    ════════════════════════ */
+    /* ── PAGE HEADER ── */
     .page-header {
       background: var(--white);
       border-bottom: 1px solid var(--border);
@@ -155,17 +73,18 @@
     .page-header-inner {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 0 20px;
-      height: 50px;
+      padding: 0 24px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
     .page-title {
-      font-size: 15px;
-      font-weight: 800;
+      font-size: 13px;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.6px;
+      color: var(--text);
     }
     .page-meta {
       display: flex;
@@ -176,16 +95,14 @@
       letter-spacing: 0.3px;
     }
     .live-dot {
-      width: 6px; height: 6px;
+      width: 5px; height: 5px;
       border-radius: 50%;
       background: var(--black);
       animation: blink 1.6s ease-in-out infinite;
     }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.1} }
 
-    /* ════════════════════════
-       FILTER BAR
-    ════════════════════════ */
+    /* ── FILTER BAR ── */
     .filter-bar {
       background: var(--white);
       border-bottom: 1px solid var(--border);
@@ -193,22 +110,21 @@
     .filter-bar-inner {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 0 20px;
-      height: 42px;
+      padding: 0 24px;
+      height: 40px;
       display: flex;
       align-items: center;
       gap: 0;
     }
-
     .conf-tabs { display: flex; height: 100%; }
     .conf-tab {
       height: 100%;
-      padding: 0 18px;
-      font-size: 11.5px;
+      padding: 0 16px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.5px;
       border-bottom: 2px solid transparent;
       margin-bottom: -1px;
       transition: all 0.1s;
@@ -218,76 +134,20 @@
     .conf-tab:hover { color: var(--text); }
     .conf-tab.active { color: var(--black); border-bottom-color: var(--black); }
 
-    .filter-sep {
-      width: 1px; height: 18px;
-      background: var(--border);
-      margin: 0 16px;
-    }
-
-    .season-select {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11.5px;
-    }
-    .season-select label {
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-    .season-select select {
-      border: 1px solid var(--gray-300);
-      border-radius: 2px;
-      padding: 4px 8px;
-      font-size: 11.5px;
-      font-weight: 600;
-      font-family: inherit;
-      color: var(--text);
-      background: var(--white);
-    }
-
-    .view-tabs {
-      display: flex;
-      margin-left: auto;
-      border: 1px solid var(--gray-300);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .view-tab {
-      padding: 5px 13px;
-      font-size: 10.5px;
-      font-weight: 600;
-      color: var(--text-soft);
-      background: var(--white);
-      border-right: 1px solid var(--gray-300);
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-      transition: all 0.1s;
-    }
-    .view-tab:last-child { border-right: none; }
-    .view-tab.active { background: var(--black); color: var(--white); }
-    .view-tab:hover:not(.active) { background: var(--gray-100); }
-
-    /* ════════════════════════
-       LAYOUT
-    ════════════════════════ */
+    /* ── LAYOUT ── */
     .layout {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 20px 24px;
     }
 
-    /* ════════════════════════
-       TABLE CARD
-    ════════════════════════ */
+    /* ── TABLE CARD ── */
     .table-card {
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: 2px;
       overflow: hidden;
     }
-
     .standings-table {
       width: 100%;
       border-collapse: collapse;
@@ -299,7 +159,7 @@
       border-bottom: 1px solid var(--gray-200);
     }
     .standings-table thead th {
-      padding: 10px 10px;
+      padding: 10px 12px;
       font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
@@ -308,7 +168,7 @@
       text-align: center;
       white-space: nowrap;
     }
-    .standings-table thead th.th-team { text-align: left; padding-left: 14px; }
+    .standings-table thead th.th-team { text-align: left; padding-left: 16px; }
     .standings-table thead th.th-oracle {
       color: var(--black);
       position: relative;
@@ -318,7 +178,7 @@
       position: absolute;
       bottom: 0; left: 50%;
       transform: translateX(-50%);
-      width: 24px; height: 2px;
+      width: 20px; height: 2px;
       background: var(--black);
     }
 
@@ -329,50 +189,36 @@
     }
     .standings-table tbody tr:last-child { border-bottom: none; }
     .standings-table tbody tr:hover { background: var(--gray-50); }
-    .standings-table tbody tr.playoff-zone { background: var(--gray-50); }
+    .standings-table tbody tr.playoff-zone { background: #fafafa; }
     .standings-table tbody tr.playoff-zone:hover { background: var(--gray-100); }
 
     .standings-table tbody td {
-      padding: 11px 10px;
+      padding: 11px 12px;
       text-align: center;
       font-size: 13px;
       color: var(--text-soft);
       white-space: nowrap;
     }
-    .standings-table tbody td.td-team { text-align: left; padding-left: 14px; }
+    .standings-table tbody td.td-team { text-align: left; padding-left: 16px; }
 
     /* Rank */
-    .rank-num {
-      font-size: 11.5px;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
+    .rank-num { font-size: 11px; font-weight: 600; color: var(--text-muted); }
     .rank-num.seed { color: var(--black); font-weight: 800; }
 
     /* Team cell */
-    .team-cell {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 200px;
-    }
+    .team-cell { display: flex; align-items: center; gap: 10px; min-width: 190px; }
     .team-initials {
-      width: 28px; height: 28px;
+      width: 26px; height: 26px;
       border-radius: 50%;
       background: var(--black);
       color: var(--white);
       display: flex; align-items: center; justify-content: center;
-      font-size: 8px;
+      font-size: 7.5px;
       font-weight: 800;
       letter-spacing: 0.3px;
       flex-shrink: 0;
     }
-    .team-name-text {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .team-name-text:hover { text-decoration: underline; }
+    .team-name-text { font-size: 13px; font-weight: 700; color: var(--text); }
 
     /* Stat styles */
     .td-bold { font-weight: 700; color: var(--text); }
@@ -380,7 +226,7 @@
     .td-pos  { font-weight: 700; color: var(--text); }
     .td-neg  { font-weight: 400; color: var(--text-muted); }
 
-    /* Oracle probability column */
+    /* Oracle column */
     .prob-cell {
       display: flex;
       flex-direction: column;
@@ -388,15 +234,10 @@
       gap: 4px;
       min-width: 80px;
     }
-    .prob-pct {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--black);
-      line-height: 1;
-    }
+    .prob-pct { font-size: 13px; font-weight: 800; color: var(--black); line-height: 1; }
     .prob-pct.faded { color: var(--text-muted); font-weight: 500; }
     .prob-track {
-      width: 60px; height: 3px;
+      width: 56px; height: 3px;
       background: var(--gray-200);
       border-radius: 2px;
       overflow: hidden;
@@ -412,11 +253,11 @@
     /* Status pill */
     .status-pill {
       display: inline-block;
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
       letter-spacing: 0.4px;
       text-transform: uppercase;
-      padding: 3px 8px;
+      padding: 3px 7px;
       border-radius: 2px;
       white-space: nowrap;
     }
@@ -427,15 +268,15 @@
     /* Cutoff row */
     .cutoff-row td { padding: 0 !important; border: none !important; }
     .cutoff-line {
-      height: 26px;
+      height: 24px;
       background: var(--gray-50);
       border-top: 1px dashed var(--gray-300);
       border-bottom: 1px dashed var(--gray-300);
       display: flex;
       align-items: center;
-      padding: 0 14px;
+      padding: 0 16px;
       gap: 10px;
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 700;
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -450,7 +291,7 @@
 
     /* Table footer */
     .table-footer {
-      padding: 10px 14px;
+      padding: 10px 16px;
       border-top: 1px solid var(--border);
       background: var(--gray-50);
       font-size: 10.5px;
@@ -461,12 +302,9 @@
     }
 
     /* State rows */
-    .state-row td {
-      padding: 48px 20px !important;
-      text-align: center;
-    }
+    .state-row td { padding: 48px 20px !important; text-align: center; }
     .loader {
-      width: 18px; height: 18px;
+      width: 16px; height: 16px;
       border: 2px solid var(--gray-200);
       border-top-color: var(--black);
       border-radius: 50%;
@@ -477,118 +315,49 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ════════════════════════
-       FOOTER
-    ════════════════════════ */
+    /* ── FOOTER ── */
     .site-footer {
       background: var(--black);
       color: #444;
-      padding: 36px 0 20px;
-      margin-top: 40px;
+      padding: 28px 0 20px;
+      margin-top: 32px;
     }
     .footer-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-    .footer-logo {
-      color: var(--white);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-    .footer-links { display: flex; flex-wrap: wrap; margin-bottom: 18px; }
-    .footer-links a {
-      font-size: 11px;
-      color: #444;
-      padding: 0 12px;
-      border-right: 1px solid #1f1f1f;
-      line-height: 1;
-      transition: color 0.1s;
-    }
-    .footer-links a:first-child { padding-left: 0; }
-    .footer-links a:last-child { border-right: none; }
-    .footer-links a:hover { color: var(--white); }
     .footer-copy {
       font-size: 10.5px;
-      color: #2a2a2a;
-      border-top: 1px solid #1a1a1a;
-      padding-top: 14px;
+      color: #333;
       line-height: 1.8;
     }
 
-    /* ════════════════════════
-       RESPONSIVE
-    ════════════════════════ */
+    /* ── RESPONSIVE ── */
     @media (max-width: 960px) {
       .standings-table th:nth-child(n+9),
       .standings-table td:nth-child(n+9) { display: none; }
     }
     @media (max-width: 640px) {
-      .nav-links { display: none; }
-      .view-tabs { display: none; }
       .layout { padding: 12px; }
       .standings-table th:nth-child(n+7),
       .standings-table td:nth-child(n+7) { display: none; }
     }
-
   </style>
 </head>
 <body>
 
-<!-- UTILITY BAR -->
-<div class="utility-bar">
-  <a href="#">Watch</a>
-  <a href="#">Tickets</a>
-  <a href="#">Shop</a>
-  <a href="#">Fantasy</a>
-  <a href="#">League Pass</a>
-</div>
-
-<!-- MAIN NAV -->
+<!-- NAV -->
 <header class="main-nav">
   <nav class="nav-inner">
-
-    <div class="nav-logo">
-      <svg class="nba-shield" viewBox="0 0 40 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2 3Q2 1 4 1H36Q38 1 38 3V50Q38 58 20 58Q2 58 2 50Z" fill="#1d428a"/>
-        <path d="M19 5Q10 6 7 13Q4 21 7 33Q10 45 19 52Z" fill="#c8102e"/>
-        <path d="M21 5Q30 6 33 13Q36 21 33 33Q30 45 21 52Z" fill="#c8102e"/>
-        <circle cx="20" cy="16" r="4" fill="white"/>
-        <path d="M13 22Q16 19 20 20Q24 19 27 22L28 34H25L24 26L23 34H17L16 26L15 34H12Z" fill="white"/>
-        <path d="M12 34L10 47H13.5L16 38L17 34Z" fill="white"/>
-        <path d="M28 34L30 47H26.5L24 38L23 34Z" fill="white"/>
-      </svg>
-    </div>
-
-    <ul class="nav-links">
-      <li><a href="#">Scores</a></li>
-      <li><a href="#" class="active">Standings</a></li>
-      <li><a href="#">Schedule</a></li>
-      <li><a href="#">Stats</a></li>
-      <li><a href="#">Teams</a></li>
-      <li><a href="#">Players</a></li>
-      <li><a href="#">Watch</a></li>
-      <li><a href="#">Fantasy</a></li>
-    </ul>
-
-    <div class="nav-actions">
-      <div class="search-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-          <circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/>
-        </svg>
-      </div>
-      <a class="btn-watch" href="#">Watch Live</a>
-    </div>
-
+    <span class="nav-title">NBA Postseason Oracle</span>
+    <span class="nav-meta">Global Sports Insights · 2025–26</span>
   </nav>
 </header>
 
 <!-- PAGE HEADER -->
 <div class="page-header">
   <div class="page-header-inner">
-    <span class="page-title">NBA Team Standings &amp; Stats</span>
+    <span class="page-title">Playoff Probability Standings</span>
     <span class="page-meta">
       <span class="live-dot"></span>
-      Oracle · 2025–26 · Azure AutoML
+      Azure AutoML · VotingEnsemble
     </span>
   </div>
 </div>
@@ -596,30 +365,10 @@
 <!-- FILTER BAR -->
 <div class="filter-bar">
   <div class="filter-bar-inner">
-
     <div class="conf-tabs">
-      <button class="conf-tab active" onclick="switchConf('east', this)">Eastern</button>
-      <button class="conf-tab" onclick="switchConf('west', this)">Western</button>
+      <button class="conf-tab active" onclick="switchConf('east', this)">Eastern Conference</button>
+      <button class="conf-tab" onclick="switchConf('west', this)">Western Conference</button>
     </div>
-
-    <div class="filter-sep"></div>
-
-    <div class="season-select">
-      <label>Season</label>
-      <select>
-        <option>2025–26</option>
-        <option>2024–25</option>
-        <option>2023–24</option>
-      </select>
-    </div>
-
-    <div class="view-tabs">
-      <button class="view-tab active">Overall</button>
-      <button class="view-tab">Home / Away</button>
-      <button class="view-tab">Streaks</button>
-      <button class="view-tab">Oracle</button>
-    </div>
-
   </div>
 </div>
 
@@ -661,32 +410,19 @@
 <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-logo">NBA Oracle 2026</div>
-    <div class="footer-links">
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Use</a>
-      <a href="#">Cookie Settings</a>
-      <a href="#">Do Not Sell My Info</a>
-      <a href="#">Accessibility</a>
-      <a href="#">Contact</a>
-    </div>
     <div class="footer-copy">
-      © 2026 Global Sports Insights (GSI). Academic project — Azure Cloud Computing Case Study.<br>
+      © 2026 Global Sports Insights (GSI). Academic project — Azure Cloud Computing Case Study.
       NBA and related marks are trademarks of NBA Properties, Inc. Non-commercial educational use only.
     </div>
   </div>
 </footer>
 
 <script>
-// ── Azure Blob URL — replaced at build time by GitHub Actions (deploy.yml) ──
-// Format: https://<account>.blob.core.windows.net/data/predictions.json
-// Never hardcode account names here — use GitHub Secrets only.
 const PREDICTIONS_URL = 'predictions.json';
 
 let currentConf = 'east';
 let oracleData  = null;
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
 const abbr = name =>
   name.trim().split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
 
@@ -704,7 +440,6 @@ const statusPill = p => {
   return `<span class="status-pill pill-out">Lottery</span>`;
 };
 
-// ── Render table ─────────────────────────────────────────────────────────────
 function render(conf) {
   if (!oracleData) return;
 
@@ -722,7 +457,6 @@ function render(conf) {
     const faded  = team.playoffProbability < 30;
     const netSign = team.netRating >= 0 ? '+' : '';
 
-    // Cutoff divider before 9th team
     if (rank === 9) {
       const cut = document.createElement('tr');
       cut.className = 'cutoff-row';
@@ -742,7 +476,7 @@ function render(conf) {
       <td class="td-team">
         <div class="team-cell">
           <div class="team-initials">${abbr(team.name)}</div>
-          <a class="team-name-text" href="#">${team.name}</a>
+          <span class="team-name-text">${team.name}</span>
         </div>
       </td>
       <td class="td-bold">${team.wins}</td>
@@ -766,7 +500,6 @@ function render(conf) {
     tbody.appendChild(tr);
   });
 
-  // Animate probability bars
   requestAnimationFrame(() =>
     setTimeout(() =>
       tbody.querySelectorAll('.prob-fill[data-w]').forEach(el => {
@@ -776,7 +509,6 @@ function render(conf) {
   );
 }
 
-// ── Conference switch ────────────────────────────────────────────────────────
 function switchConf(conf, btn) {
   currentConf = conf;
   document.querySelectorAll('.conf-tab').forEach(b => b.classList.remove('active'));
@@ -784,11 +516,10 @@ function switchConf(conf, btn) {
   render(conf);
 }
 
-// ── Error state ──────────────────────────────────────────────────────────────
 function showError(msg) {
   document.getElementById('tableBody').innerHTML = `
     <tr class="state-row"><td colspan="11">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
            stroke="#a3a3a3" stroke-width="2" style="vertical-align:middle;margin-right:8px">
         <circle cx="12" cy="12" r="10"/>
         <line x1="12" y1="8" x2="12" y2="12"/>
@@ -800,7 +531,6 @@ function showError(msg) {
     'Failed to load — check Azure container access and CORS settings';
 }
 
-// ── Fetch from Azure Blob Storage ────────────────────────────────────────────
 async function init() {
   try {
     const res = await fetch(PREDICTIONS_URL, { cache: 'no-cache' });
@@ -808,7 +538,7 @@ async function init() {
     oracleData = await res.json();
   } catch (err) {
     console.error('[Oracle]', err);
-    showError(`Could not load from Azure Blob Storage: ${err.message}`);
+    showError(`Could not load predictions: ${err.message}`);
     return;
   }
 

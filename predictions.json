@@ -1,0 +1,308 @@
+{
+  "season": "2025-26",
+  "model": "VotingEnsemble",
+  "aucScore": "0.94",
+  "generatedAt": "2026-02-24T00:00:00Z",
+  "teams": [
+    {
+      "name": "Boston Celtics",
+      "conference": "east",
+      "wins": 54,
+      "losses": 28,
+      "netRating": 7.3,
+      "defRating": 109.4,
+      "threePctg": 0.358,
+      "playoffProbability": 96.0
+    },
+    {
+      "name": "Oklahoma City Thunder",
+      "conference": "west",
+      "wins": 62,
+      "losses": 20,
+      "netRating": 11.4,
+      "defRating": 105.2,
+      "threePctg": 0.358,
+      "playoffProbability": 95.5
+    },
+    {
+      "name": "San Antonio Spurs",
+      "conference": "west",
+      "wins": 59,
+      "losses": 23,
+      "netRating": 6.4,
+      "defRating": 108.8,
+      "threePctg": 0.358,
+      "playoffProbability": 95.0
+    },
+    {
+      "name": "Houston Rockets",
+      "conference": "west",
+      "wins": 51,
+      "losses": 31,
+      "netRating": 4.9,
+      "defRating": 109.1,
+      "threePctg": 0.358,
+      "playoffProbability": 94.3
+    },
+    {
+      "name": "Detroit Pistons",
+      "conference": "east",
+      "wins": 63,
+      "losses": 19,
+      "netRating": 7.9,
+      "defRating": 105.5,
+      "threePctg": 0.358,
+      "playoffProbability": 94.0
+    },
+    {
+      "name": "Cleveland Cavaliers",
+      "conference": "east",
+      "wins": 51,
+      "losses": 31,
+      "netRating": 4.1,
+      "defRating": 111.3,
+      "threePctg": 0.358,
+      "playoffProbability": 93.0
+    },
+    {
+      "name": "New York Knicks",
+      "conference": "east",
+      "wins": 52,
+      "losses": 30,
+      "netRating": 5.7,
+      "defRating": 111.0,
+      "threePctg": 0.358,
+      "playoffProbability": 92.9
+    },
+    {
+      "name": "Denver Nuggets",
+      "conference": "west",
+      "wins": 51,
+      "losses": 31,
+      "netRating": 4.5,
+      "defRating": 114.5,
+      "threePctg": 0.358,
+      "playoffProbability": 92.7
+    },
+    {
+      "name": "Minnesota Timberwolves",
+      "conference": "west",
+      "wins": 49,
+      "losses": 33,
+      "netRating": 4.3,
+      "defRating": 111.0,
+      "threePctg": 0.358,
+      "playoffProbability": 91.4
+    },
+    {
+      "name": "Toronto Raptors",
+      "conference": "east",
+      "wins": 49,
+      "losses": 33,
+      "netRating": 2.1,
+      "defRating": 109.6,
+      "threePctg": 0.358,
+      "playoffProbability": 88.8
+    },
+    {
+      "name": "Los Angeles Lakers",
+      "conference": "west",
+      "wins": 50,
+      "losses": 32,
+      "netRating": -0.4,
+      "defRating": 115.1,
+      "threePctg": 0.358,
+      "playoffProbability": 86.0
+    },
+    {
+      "name": "Miami Heat",
+      "conference": "east",
+      "wins": 44,
+      "losses": 38,
+      "netRating": 2.9,
+      "defRating": 109.3,
+      "threePctg": 0.358,
+      "playoffProbability": 82.6
+    },
+    {
+      "name": "Phoenix Suns",
+      "conference": "west",
+      "wins": 47,
+      "losses": 35,
+      "netRating": 1.0,
+      "defRating": 110.3,
+      "threePctg": 0.358,
+      "playoffProbability": 82.4
+    },
+    {
+      "name": "Philadelphia 76ers",
+      "conference": "east",
+      "wins": 45,
+      "losses": 37,
+      "netRating": 0.3,
+      "defRating": 112.6,
+      "threePctg": 0.358,
+      "playoffProbability": 74.3
+    },
+    {
+      "name": "Orlando Magic",
+      "conference": "east",
+      "wins": 44,
+      "losses": 38,
+      "netRating": 0.4,
+      "defRating": 111.2,
+      "threePctg": 0.358,
+      "playoffProbability": 72.3
+    },
+    {
+      "name": "Golden State Warriors",
+      "conference": "west",
+      "wins": 43,
+      "losses": 39,
+      "netRating": 1.7,
+      "defRating": 110.6,
+      "threePctg": 0.358,
+      "playoffProbability": 63.7
+    },
+    {
+      "name": "LA Clippers",
+      "conference": "west",
+      "wins": 39,
+      "losses": 43,
+      "netRating": -0.5,
+      "defRating": 113.7,
+      "threePctg": 0.358,
+      "playoffProbability": 43.3
+    },
+    {
+      "name": "Charlotte Hornets",
+      "conference": "east",
+      "wins": 38,
+      "losses": 44,
+      "netRating": 1.9,
+      "defRating": 111.6,
+      "threePctg": 0.358,
+      "playoffProbability": 31.3
+    },
+    {
+      "name": "Atlanta Hawks",
+      "conference": "east",
+      "wins": 39,
+      "losses": 43,
+      "netRating": -1.4,
+      "defRating": 112.7,
+      "threePctg": 0.358,
+      "playoffProbability": 31.2
+    },
+    {
+      "name": "Portland Trail Blazers",
+      "conference": "west",
+      "wins": 40,
+      "losses": 42,
+      "netRating": -2.4,
+      "defRating": 112.6,
+      "threePctg": 0.358,
+      "playoffProbability": 24.4
+    },
+    {
+      "name": "Milwaukee Bucks",
+      "conference": "east",
+      "wins": 36,
+      "losses": 46,
+      "netRating": -3.4,
+      "defRating": 114.9,
+      "threePctg": 0.358,
+      "playoffProbability": 16.4
+    },
+    {
+      "name": "Dallas Mavericks",
+      "conference": "west",
+      "wins": 29,
+      "losses": 53,
+      "netRating": -3.3,
+      "defRating": 111.7,
+      "threePctg": 0.358,
+      "playoffProbability": 16.0
+    },
+    {
+      "name": "Memphis Grizzlies",
+      "conference": "west",
+      "wins": 31,
+      "losses": 51,
+      "netRating": -2.2,
+      "defRating": 112.4,
+      "threePctg": 0.358,
+      "playoffProbability": 16.0
+    },
+    {
+      "name": "Chicago Bulls",
+      "conference": "east",
+      "wins": 34,
+      "losses": 48,
+      "netRating": -4.0,
+      "defRating": 115.5,
+      "threePctg": 0.358,
+      "playoffProbability": 14.3
+    },
+    {
+      "name": "Utah Jazz",
+      "conference": "west",
+      "wins": 26,
+      "losses": 56,
+      "netRating": -7.3,
+      "defRating": 118.9,
+      "threePctg": 0.358,
+      "playoffProbability": 13.3
+    },
+    {
+      "name": "Brooklyn Nets",
+      "conference": "east",
+      "wins": 22,
+      "losses": 60,
+      "netRating": -7.9,
+      "defRating": 114.7,
+      "threePctg": 0.358,
+      "playoffProbability": 13.0
+    },
+    {
+      "name": "New Orleans Pelicans",
+      "conference": "west",
+      "wins": 23,
+      "losses": 59,
+      "netRating": -5.5,
+      "defRating": 116.4,
+      "threePctg": 0.358,
+      "playoffProbability": 12.9
+    },
+    {
+      "name": "Indiana Pacers",
+      "conference": "east",
+      "wins": 21,
+      "losses": 61,
+      "netRating": -7.2,
+      "defRating": 114.5,
+      "threePctg": 0.358,
+      "playoffProbability": 12.7
+    },
+    {
+      "name": "Washington Wizards",
+      "conference": "east",
+      "wins": 23,
+      "losses": 59,
+      "netRating": -10.0,
+      "defRating": 118.2,
+      "threePctg": 0.358,
+      "playoffProbability": 12.1
+    },
+    {
+      "name": "Sacramento Kings",
+      "conference": "west",
+      "wins": 17,
+      "losses": 65,
+      "netRating": -10.8,
+      "defRating": 118.3,
+      "threePctg": 0.358,
+      "playoffProbability": 11.1
+    }
+  ]
+}

@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NBA Team Standings & Stats | NBA Oracle 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; outline: none; background: none; font-family: inherit; }
+
+    /* ── TOKENS ── */
+    :root {
+      --black:      #000000;
+      --white:      #ffffff;
+      --gray-50:    #fafafa;
+      --gray-100:   #f5f5f5;
+      --gray-200:   #e8e8e8;
+      --gray-300:   #d4d4d4;
+      --gray-400:   #a3a3a3;
+      --gray-600:   #525252;
+      --gray-800:   #262626;
+      --text:       #111111;
+      --text-soft:  #525252;
+      --text-muted: #a3a3a3;
+      --border:     #e8e8e8;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--gray-100);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ════════════════════════
+       UTILITY BAR
+    ════════════════════════ */
+    .utility-bar {
+      background: var(--black);
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 32px;
+    }
+    .utility-bar a {
+      color: #666;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 0 14px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      border-right: 1px solid #1a1a1a;
+      letter-spacing: 0.2px;
+      transition: color 0.1s;
+    }
+    .utility-bar a:first-child { border-left: 1px solid #1a1a1a; }
+    .utility-bar a:hover { color: var(--white); }
+
+    /* ════════════════════════
+       MAIN NAV
+    ════════════════════════ */
+    .main-nav {
+      background: var(--white);
+      border-bottom: 3px solid var(--black);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      height: 60px;
+      padding: 0 20px;
+      display: flex;
+      align-items: stretch;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      padding-right: 24px;
+      border-right: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .nba-shield { width: 32px; height: 48px; }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      align-items: stretch;
+      flex: 1;
+    }
+    .nav-links li { display: flex; align-items: stretch; }
+    .nav-links li a {
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--gray-600);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -3px;
+      transition: color 0.1s, border-color 0.1s;
+    }
+    .nav-links li a:hover { color: var(--black); border-bottom-color: var(--gray-300); }
+    .nav-links li a.active { color: var(--black); border-bottom-color: var(--black); }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-left: 16px;
+      border-left: 1px solid var(--border);
+      margin-left: 4px;
+    }
+    .search-btn {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gray-600);
+      transition: background 0.1s;
+    }
+    .search-btn:hover { background: var(--gray-100); }
+    .btn-watch {
+      background: var(--black);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      padding: 8px 18px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      transition: opacity 0.1s;
+    }
+    .btn-watch:hover { opacity: 0.7; }
+
+    /* ════════════════════════
+       PAGE HEADER
+    ════════════════════════ */
+    .page-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .page-title {
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .page-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--black);
+      animation: blink 1.6s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
+
+    /* ════════════════════════
+       FILTER BAR
+    ════════════════════════ */
+    .filter-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+    .filter-bar-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .conf-tabs { display: flex; height: 100%; }
+    .conf-tab {
+      height: 100%;
+      padding: 0 18px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.1s;
+      display: flex;
+      align-items: center;
+    }
+    .conf-tab:hover { color: var(--text); }
+    .conf-tab.active { color: var(--black); border-bottom-color: var(--black); }
+
+    .filter-sep {
+      width: 1px; height: 18px;
+      background: var(--border);
+      margin: 0 16px;
+    }
+
+    .season-select {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+    }
+    .season-select label {
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .season-select select {
+      border: 1px solid var(--gray-300);
+      border-radius: 2px;
+      padding: 4px 8px;
+      font-size: 11.5px;
+      font-weight: 600;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--white);
+    }
+
+    .view-tabs {
+      display: flex;
+      margin-left: auto;
+      border: 1px solid var(--gray-300);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .view-tab {
+      padding: 5px 13px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-soft);
+      background: var(--white);
+      border-right: 1px solid var(--gray-300);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      transition: all 0.1s;
+    }
+    .view-tab:last-child { border-right: none; }
+    .view-tab.active { background: var(--black); color: var(--white); }
+    .view-tab:hover:not(.active) { background: var(--gray-100); }
+
+    /* ════════════════════════
+       LAYOUT
+    ════════════════════════ */
+    .layout {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* ════════════════════════
+       TABLE CARD
+    ════════════════════════ */
+    .table-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .standings-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    /* Head */
+    .standings-table thead tr {
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .standings-table thead th {
+      padding: 10px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .standings-table thead th.th-team { text-align: left; padding-left: 14px; }
+    .standings-table thead th.th-oracle {
+      color: var(--black);
+      position: relative;
+    }
+    .standings-table thead th.th-oracle::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 24px; height: 2px;
+      background: var(--black);
+    }
+
+    /* Body */
+    .standings-table tbody tr {
+      border-bottom: 1px solid var(--gray-100);
+      transition: background 0.08s;
+    }
+    .standings-table tbody tr:last-child { border-bottom: none; }
+    .standings-table tbody tr:hover { background: var(--gray-50); }
+    .standings-table tbody tr.playoff-zone { background: var(--gray-50); }
+    .standings-table tbody tr.playoff-zone:hover { background: var(--gray-100); }
+
+    .standings-table tbody td {
+      padding: 11px 10px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-soft);
+      white-space: nowrap;
+    }
+    .standings-table tbody td.td-team { text-align: left; padding-left: 14px; }
+
+    /* Rank */
+    .rank-num {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .rank-num.seed { color: var(--black); font-weight: 800; }
+
+    /* Team cell */
+    .team-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 200px;
+    }
+    .team-initials {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--black);
+      color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      flex-shrink: 0;
+    }
+    .team-name-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .team-name-text:hover { text-decoration: underline; }
+
+    /* Stat styles */
+    .td-bold { font-weight: 700; color: var(--text); }
+    .td-dim  { color: var(--text-muted); font-weight: 400; }
+    .td-pos  { font-weight: 700; color: var(--text); }
+    .td-neg  { font-weight: 400; color: var(--text-muted); }
+
+    /* Oracle probability column */
+    .prob-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      min-width: 80px;
+    }
+    .prob-pct {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--black);
+      line-height: 1;
+    }
+    .prob-pct.faded { color: var(--text-muted); font-weight: 500; }
+    .prob-track {
+      width: 60px; height: 3px;
+      background: var(--gray-200);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .prob-fill {
+      height: 100%;
+      background: var(--black);
+      border-radius: 2px;
+      transition: width 1.2s cubic-bezier(.22,.61,.36,1);
+    }
+    .prob-fill.faded { background: var(--gray-300); }
+
+    /* Status pill */
+    .status-pill {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+    .pill-in  { background: var(--black); color: var(--white); }
+    .pill-mid { background: var(--gray-200); color: var(--gray-800); border: 1px solid var(--gray-300); }
+    .pill-out { color: var(--text-muted); border: 1px solid var(--gray-200); }
+
+    /* Cutoff row */
+    .cutoff-row td { padding: 0 !important; border: none !important; }
+    .cutoff-line {
+      height: 26px;
+      background: var(--gray-50);
+      border-top: 1px dashed var(--gray-300);
+      border-bottom: 1px dashed var(--gray-300);
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 10px;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .cutoff-line::before, .cutoff-line::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gray-200);
+    }
+
+    /* Table footer */
+    .table-footer {
+      padding: 10px 14px;
+      border-top: 1px solid var(--border);
+      background: var(--gray-50);
+      font-size: 10.5px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* State rows */
+    .state-row td {
+      padding: 48px 20px !important;
+      text-align: center;
+    }
+    .loader {
+      width: 18px; height: 18px;
+      border: 2px solid var(--gray-200);
+      border-top-color: var(--black);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ════════════════════════
+       FOOTER
+    ════════════════════════ */
+    .site-footer {
+      background: var(--black);
+      color: #444;
+      padding: 36px 0 20px;
+      margin-top: 40px;
+    }
+    .footer-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    .footer-logo {
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; margin-bottom: 18px; }
+    .footer-links a {
+      font-size: 11px;
+      color: #444;
+      padding: 0 12px;
+      border-right: 1px solid #1f1f1f;
+      line-height: 1;
+      transition: color 0.1s;
+    }
+    .footer-links a:first-child { padding-left: 0; }
+    .footer-links a:last-child { border-right: none; }
+    .footer-links a:hover { color: var(--white); }
+    .footer-copy {
+      font-size: 10.5px;
+      color: #2a2a2a;
+      border-top: 1px solid #1a1a1a;
+      padding-top: 14px;
+      line-height: 1.8;
+    }
+
+    /* ════════════════════════
+       RESPONSIVE
+    ════════════════════════ */
+    @media (max-width: 960px) {
+      .standings-table th:nth-child(n+9),
+      .standings-table td:nth-child(n+9) { display: none; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .view-tabs { display: none; }
+      .layout { padding: 12px; }
+      .standings-table th:nth-child(n+7),
+      .standings-table td:nth-child(n+7) { display: none; }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- UTILITY BAR -->
+<div class="utility-bar">
+  <a href="#">Watch</a>
+  <a href="#">Tickets</a>
+  <a href="#">Shop</a>
+  <a href="#">Fantasy</a>
+  <a href="#">League Pass</a>
+</div>
+
+<!-- MAIN NAV -->
+<header class="main-nav">
+  <nav class="nav-inner">
+
+    <div class="nav-logo">
+      <svg class="nba-shield" viewBox="0 0 40 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 3Q2 1 4 1H36Q38 1 38 3V50Q38 58 20 58Q2 58 2 50Z" fill="#1d428a"/>
+        <path d="M19 5Q10 6 7 13Q4 21 7 33Q10 45 19 52Z" fill="#c8102e"/>
+        <path d="M21 5Q30 6 33 13Q36 21 33 33Q30 45 21 52Z" fill="#c8102e"/>
+        <circle cx="20" cy="16" r="4" fill="white"/>
+        <path d="M13 22Q16 19 20 20Q24 19 27 22L28 34H25L24 26L23 34H17L16 26L15 34H12Z" fill="white"/>
+        <path d="M12 34L10 47H13.5L16 38L17 34Z" fill="white"/>
+        <path d="M28 34L30 47H26.5L24 38L23 34Z" fill="white"/>
+      </svg>
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="#">Scores</a></li>
+      <li><a href="#" class="active">Standings</a></li>
+      <li><a href="#">Schedule</a></li>
+      <li><a href="#">Stats</a></li>
+      <li><a href="#">Teams</a></li>
+      <li><a href="#">Players</a></li>
+      <li><a href="#">Watch</a></li>
+      <li><a href="#">Fantasy</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div class="search-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+      </div>
+      <a class="btn-watch" href="#">Watch Live</a>
+    </div>
+
+  </nav>
+</header>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-title">NBA Team Standings &amp; Stats</span>
+    <span class="page-meta">
+      <span class="live-dot"></span>
+      Oracle · 2025–26 · Azure AutoML
+    </span>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-bar-inner">
+
+    <div class="conf-tabs">
+      <button class="conf-tab active" onclick="switchConf('east', this)">Eastern</button>
+      <button class="conf-tab" onclick="switchConf('west', this)">Western</button>
+    </div>
+
+    <div class="filter-sep"></div>
+
+    <div class="season-select">
+      <label>Season</label>
+      <select>
+        <option>2025–26</option>
+        <option>2024–25</option>
+        <option>2023–24</option>
+      </select>
+    </div>
+
+    <div class="view-tabs">
+      <button class="view-tab active">Overall</button>
+      <button class="view-tab">Home / Away</button>
+      <button class="view-tab">Streaks</button>
+      <button class="view-tab">Oracle</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="layout">
+  <div class="table-card">
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th style="width:36px">#</th>
+          <th class="th-team">Team</th>
+          <th>W</th>
+          <th>L</th>
+          <th>PCT</th>
+          <th>GB</th>
+          <th>NET RTG</th>
+          <th>DEF RTG</th>
+          <th>3PT%</th>
+          <th class="th-oracle">Oracle %</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr class="state-row">
+          <td colspan="11">
+            <span class="loader"></span>
+            <span style="font-size:13px;color:#a3a3a3">Loading predictions from Azure...</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="table-footer">
+      <span id="footerNote">Powered by Azure AutoML · VotingEnsemble · predictions.json</span>
+      <span id="footerTime"></span>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">NBA Oracle 2026</div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+      <a href="#">Cookie Settings</a>
+      <a href="#">Do Not Sell My Info</a>
+      <a href="#">Accessibility</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-copy">
+      © 2026 Global Sports Insights (GSI). Academic project — Azure Cloud Computing Case Study.<br>
+      NBA and related marks are trademarks of NBA Properties, Inc. Non-commercial educational use only.
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Azure Blob URL — replaced at build time by GitHub Actions (deploy.yml) ──
+// Format: https://<account>.blob.core.windows.net/data/predictions.json
+// Never hardcode account names here — use GitHub Secrets only.
+const PREDICTIONS_URL = 'predictions.json';
+
+let currentConf = 'east';
+let oracleData  = null;
+
+// ── Helpers ─────────────────────────────────────────────────────────────────
+const abbr = name =>
+  name.trim().split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
+
+const winPct = (w, l) =>
+  (w / (w + l)).toFixed(3).replace(/^0/, '');
+
+const gamesBack = (lw, ll, tw, tl) => {
+  const d = ((lw - tw) + (tl - ll)) / 2;
+  return d === 0 ? '—' : d.toFixed(1);
+};
+
+const statusPill = p => {
+  if (p >= 55) return `<span class="status-pill pill-in">Playoff</span>`;
+  if (p >= 30) return `<span class="status-pill pill-mid">Bubble</span>`;
+  return `<span class="status-pill pill-out">Lottery</span>`;
+};
+
+// ── Render table ─────────────────────────────────────────────────────────────
+function render(conf) {
+  if (!oracleData) return;
+
+  const teams = [...oracleData.teams]
+    .filter(t => t.conference.toLowerCase() === conf)
+    .sort((a, b) => b.playoffProbability - a.playoffProbability);
+
+  const leader = teams[0];
+  const tbody  = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+
+  teams.forEach((team, i) => {
+    const rank   = i + 1;
+    const isTop8 = rank <= 8;
+    const faded  = team.playoffProbability < 30;
+    const netSign = team.netRating >= 0 ? '+' : '';
+
+    // Cutoff divider before 9th team
+    if (rank === 9) {
+      const cut = document.createElement('tr');
+      cut.className = 'cutoff-row';
+      cut.innerHTML = `<td colspan="11">
+        <div class="cutoff-line">Playoff cutoff · top 8 advance</div>
+      </td>`;
+      tbody.appendChild(cut);
+    }
+
+    const tr = document.createElement('tr');
+    if (isTop8) tr.classList.add('playoff-zone');
+
+    tr.innerHTML = `
+      <td style="text-align:center">
+        <span class="rank-num ${isTop8 ? 'seed' : ''}">${rank}</span>
+      </td>
+      <td class="td-team">
+        <div class="team-cell">
+          <div class="team-initials">${abbr(team.name)}</div>
+          <a class="team-name-text" href="#">${team.name}</a>
+        </div>
+      </td>
+      <td class="td-bold">${team.wins}</td>
+      <td class="td-dim">${team.losses}</td>
+      <td class="td-bold">${winPct(team.wins, team.losses)}</td>
+      <td class="td-dim">${gamesBack(leader.wins, leader.losses, team.wins, team.losses)}</td>
+      <td class="${team.netRating >= 0 ? 'td-pos' : 'td-neg'}">${netSign}${team.netRating}</td>
+      <td class="${team.defRating < 112 ? 'td-bold' : 'td-dim'}">${team.defRating}</td>
+      <td style="color:#525252;font-weight:500">${(team.threePctg * 100).toFixed(1)}%</td>
+      <td>
+        <div class="prob-cell">
+          <span class="prob-pct ${faded ? 'faded' : ''}">${team.playoffProbability}%</span>
+          <div class="prob-track">
+            <div class="prob-fill ${faded ? 'faded' : ''}"
+                 style="width:0%" data-w="${team.playoffProbability}"></div>
+          </div>
+        </div>
+      </td>
+      <td>${statusPill(team.playoffProbability)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // Animate probability bars
+  requestAnimationFrame(() =>
+    setTimeout(() =>
+      tbody.querySelectorAll('.prob-fill[data-w]').forEach(el => {
+        el.style.width = el.dataset.w + '%';
+      }), 60
+    )
+  );
+}
+
+// ── Conference switch ────────────────────────────────────────────────────────
+function switchConf(conf, btn) {
+  currentConf = conf;
+  document.querySelectorAll('.conf-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render(conf);
+}
+
+// ── Error state ──────────────────────────────────────────────────────────────
+function showError(msg) {
+  document.getElementById('tableBody').innerHTML = `
+    <tr class="state-row"><td colspan="11">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+           stroke="#a3a3a3" stroke-width="2" style="vertical-align:middle;margin-right:8px">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span style="font-size:13px;color:#a3a3a3">${msg}</span>
+    </td></tr>`;
+  document.getElementById('footerNote').textContent =
+    'Failed to load — check Azure container access and CORS settings';
+}
+
+// ── Fetch from Azure Blob Storage ────────────────────────────────────────────
+async function init() {
+  try {
+    const res = await fetch(PREDICTIONS_URL, { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+    oracleData = await res.json();
+  } catch (err) {
+    console.error('[Oracle]', err);
+    showError(`Could not load from Azure Blob Storage: ${err.message}`);
+    return;
+  }
+
+  render(currentConf);
+
+  const updated = new Date(oracleData.generatedAt)
+    .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+  document.getElementById('footerNote').textContent =
+    `Azure AutoML · ${oracleData.model} · AUC ${oracleData.aucScore}`;
+  document.getElementById('footerTime').textContent = `Updated ${updated}`;
+}
+
+init();
+</script>
+</body>
+</html>

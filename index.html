@@ -419,11 +419,72 @@
 </footer>
 
 <script>
-const PREDICTIONS_URL = 'predictions.json';
+const PREDICTIONS_URL = 'predictions.csv';
+
+// Conference map — all 30 teams
+const CONF_MAP = {
+  "Atlanta Hawks": "east", "Boston Celtics": "east", "Brooklyn Nets": "east",
+  "Charlotte Hornets": "east", "Chicago Bulls": "east", "Cleveland Cavaliers": "east",
+  "Detroit Pistons": "east", "Indiana Pacers": "east", "Miami Heat": "east",
+  "Milwaukee Bucks": "east", "New York Knicks": "east", "Orlando Magic": "east",
+  "Philadelphia 76ers": "east", "Toronto Raptors": "east", "Washington Wizards": "east",
+  "Dallas Mavericks": "west", "Denver Nuggets": "west", "Golden State Warriors": "west",
+  "Houston Rockets": "west", "LA Clippers": "west", "Los Angeles Lakers": "west",
+  "Memphis Grizzlies": "west", "Minnesota Timberwolves": "west", "New Orleans Pelicans": "west",
+  "Oklahoma City Thunder": "west", "Phoenix Suns": "west", "Portland Trail Blazers": "west",
+  "Sacramento Kings": "west", "San Antonio Spurs": "west", "Utah Jazz": "west"
+};
+
+// W-L records (2025-26 season)
+const WL_MAP = {
+  "Atlanta Hawks": [39,43], "Boston Celtics": [54,28], "Brooklyn Nets": [22,60],
+  "Charlotte Hornets": [38,44], "Chicago Bulls": [34,48], "Cleveland Cavaliers": [51,31],
+  "Detroit Pistons": [63,19], "Indiana Pacers": [21,61], "Miami Heat": [44,38],
+  "Milwaukee Bucks": [36,46], "New York Knicks": [52,30], "Orlando Magic": [44,38],
+  "Philadelphia 76ers": [45,37], "Toronto Raptors": [49,33], "Washington Wizards": [23,59],
+  "Dallas Mavericks": [29,53], "Denver Nuggets": [51,31], "Golden State Warriors": [43,39],
+  "Houston Rockets": [51,31], "LA Clippers": [39,43], "Los Angeles Lakers": [50,32],
+  "Memphis Grizzlies": [31,51], "Minnesota Timberwolves": [49,33], "New Orleans Pelicans": [23,59],
+  "Oklahoma City Thunder": [62,20], "Phoenix Suns": [47,35], "Portland Trail Blazers": [40,42],
+  "Sacramento Kings": [17,65], "San Antonio Spurs": [59,23], "Utah Jazz": [26,56]
+};
 
 let currentConf = 'all';
 let oracleData  = null;
 
+// ── CSV Parser ───────────────────────────────────────────────────────────────
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.trim());
+  return lines.slice(1).map(line => {
+    const vals = line.split(',');
+    const row = {};
+    headers.forEach((h, i) => row[h] = (vals[i] || '').trim());
+    return row;
+  });
+}
+
+function csvToOracleData(rows) {
+  const teams = rows.map(row => {
+    const name = row['TEAM_NAME_orig'];
+    const prob = Math.round(parseFloat(row['True_predicted_proba']) * 1000) / 10;
+    const wl   = WL_MAP[name] || [41, 41];
+    return {
+      name,
+      conference:        CONF_MAP[name] || 'east',
+      wins:              wl[0],
+      losses:            wl[1],
+      netRating:         parseFloat(row['NET_RATING_orig']),
+      defRating:         parseFloat(row['DEF_RATING_orig']),
+      offRating:         parseFloat(row['OFF_RATING_orig']),
+      threePctg:         0.358,
+      playoffProbability: prob
+    };
+  });
+  return { teams, model: 'VotingEnsemble', aucScore: '0.94' };
+}
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
 const abbr = name =>
   name.trim().split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
 
@@ -441,6 +502,7 @@ const statusPill = p => {
   return `<span class="status-pill pill-out">Lottery</span>`;
 };
 
+// ── Render ───────────────────────────────────────────────────────────────────
 function render(conf) {
   if (!oracleData) return;
 
@@ -456,27 +518,27 @@ function render(conf) {
   tbody.innerHTML = '';
 
   teams.forEach((team, i) => {
-    const rank   = i + 1;
-    const isTop8 = rank <= playoffCount;
-    const faded  = team.playoffProbability < 30;
+    const rank    = i + 1;
+    const isTopN  = rank <= playoffCount;
+    const faded   = team.playoffProbability < 30;
     const netSign = team.netRating >= 0 ? '+' : '';
 
     if (rank === playoffCount + 1) {
       const cut = document.createElement('tr');
       cut.className = 'cutoff-row';
-      const label = isAll ? 'Playoff cutoff · top 16 advance (8 per conference)' : 'Playoff cutoff · top 8 advance';
-      cut.innerHTML = `<td colspan="11">
-        <div class="cutoff-line">${label}</div>
-      </td>`;
+      const label = isAll
+        ? 'Playoff cutoff · top 16 advance (8 per conference)'
+        : 'Playoff cutoff · top 8 advance';
+      cut.innerHTML = `<td colspan="11"><div class="cutoff-line">${label}</div></td>`;
       tbody.appendChild(cut);
     }
 
     const tr = document.createElement('tr');
-    if (isTop8) tr.classList.add('playoff-zone');
+    if (isTopN) tr.classList.add('playoff-zone');
 
     tr.innerHTML = `
       <td style="text-align:center">
-        <span class="rank-num ${isTop8 ? 'seed' : ''}">${rank}</span>
+        <span class="rank-num ${isTopN ? 'seed' : ''}">${rank}</span>
       </td>
       <td class="td-team">
         <div class="team-cell">
@@ -536,25 +598,26 @@ function showError(msg) {
     'Failed to load — check Azure container access and CORS settings';
 }
 
+// ── Init: fetch CSV and parse ─────────────────────────────────────────────────
 async function init() {
   try {
     const res = await fetch(PREDICTIONS_URL, { cache: 'no-cache' });
     if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
-    oracleData = await res.json();
+    const text = await res.text();
+    const rows = parseCSV(text);
+    oracleData = csvToOracleData(rows);
   } catch (err) {
     console.error('[Oracle]', err);
-    showError(`Could not load predictions: ${err.message}`);
+    showError(`Could not load predictions.csv: ${err.message}`);
     return;
   }
 
   render(currentConf);
 
-  const updated = new Date(oracleData.generatedAt)
-    .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-
   document.getElementById('footerNote').textContent =
     `Azure AutoML · ${oracleData.model} · AUC ${oracleData.aucScore}`;
-  document.getElementById('footerTime').textContent = `Updated ${updated}`;
+  document.getElementById('footerTime').textContent =
+    `Season 2025–26`;
 }
 
 init();

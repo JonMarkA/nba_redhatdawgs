@@ -19,8 +19,8 @@ jobs:
 
       - name: Upload files to Azure $web container
         run: |
-          az storage blob upload-batch \
+          az storage account \
             --source . \
             --destination '$web' \
-            --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}" \
+            --show-connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}" \
             --overwrite true

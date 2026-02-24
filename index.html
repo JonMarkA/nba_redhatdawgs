@@ -489,7 +489,7 @@ const abbr = name =>
   name.trim().split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
 
 const winPct = (w, l) =>
-  (w / (w + l)).toFixed(3).replace(/^0/, '');
+  ((w / (w + l)) * 100).toFixed(1) + "%";
 
 const gamesBack = (lw, ll, tw, tl) => {
   const d = ((lw - tw) + (tl - ll)) / 2;
